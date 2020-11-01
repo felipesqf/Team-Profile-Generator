@@ -32,7 +32,7 @@ so that I have quick access to emails and GitHub profiles
 
 #### Final Product
 
-![screenshot1](https://github.com/felipesqf/Good-README-Generator/blob/master/Assets/team.PNG)
+![screenshot1](https://github.com/felipesqf/Team-Profile-Generator/blob/master/Assets/team.PNG)
 
 ### Licence
 
