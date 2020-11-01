@@ -11,7 +11,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
 async function init() {
-    const newEmployee = inquirer.prompt([
+     inquirer.prompt([
       {
         type: "input",
         name: "name",
