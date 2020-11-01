@@ -8,16 +8,17 @@ const fs = require("fs");
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
+let roleChoices = ["Engineer", "Intern", "Manager"]
 const inputEmployees = []
 const render = require("./lib/htmlRenderer");
 const Employee = require("./lib/Employee");
 
 init = () =>{
-     inquirer.prompt([{
+    inquirer.prompt([{
         type: "list",
         name: "role",
         message: "What is the employee role?",
-        choices:["Intern", "Engineer", "Manager"]
+        choices: roleChoices
         },
       {
         type: "input",
@@ -72,10 +73,10 @@ init = () =>{
             )
             .then((response) => {
             const newManger = new Manager(newEmployee.name, newEmployee.id, newEmployee.email,  response.office);
+            roleChoices = ["Engineer", "Intern"];
             manageNewEmployees(newManger)
         })
         }
-        
     })
   }
 manageNewEmployees = (emp) =>{
@@ -106,7 +107,16 @@ askEnterEmployee = () =>{
         }
         })
 }
-
+// checkManagerExistent = () =>{
+//     console.log(inputEmployees)
+//     for (let i = 0; i < inputEmployees.length; i++){
+//     if (inputEmployees[i] == "Manager") 
+//         return roleChoices = ["Engineer", "Intern", "Manager"]
+//     else{
+//         return roleChoices =  ["Engineer", "Intern"] 
+//     }
+// }
+// }
 askEnterEmployee()
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
