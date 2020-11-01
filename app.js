@@ -13,6 +13,7 @@ const inputEmployees = []
 const render = require("./lib/htmlRenderer");
 const Employee = require("./lib/Employee");
 
+//propmt user question
 init = () =>{
     inquirer.prompt([{
         type: "list",
@@ -37,7 +38,7 @@ init = () =>{
       }
     ])
     .then((newEmployee) => {
-        if (newEmployee.role == "Intern"){
+        if (newEmployee.role == "Intern"){ //if intern ask scholll
             inquirer.prompt(
                 {
                   type: "input",
@@ -50,7 +51,7 @@ init = () =>{
                 manageNewEmployees(newIntern)
             })
         }
-        else if (newEmployee.role == "Engineer"){
+        else if (newEmployee.role == "Engineer"){ //if engineer ask for github
             inquirer.prompt(
                 {
                   type: "input",
@@ -59,11 +60,11 @@ init = () =>{
                 }
             )
             .then((response) => {
-            const newEngineer = new Engineer(newEmployee.name, newEmployee.id, newEmployee.email, response.github,newEmployee.role);
+            const newEngineer = new Engineer(newEmployee.name, newEmployee.id, newEmployee.email, response.github);
             manageNewEmployees(newEngineer)
         })
         }
-        else{
+        else{ //if manager get office number
             inquirer.prompt(
                 {
                   type: "input",
@@ -73,18 +74,18 @@ init = () =>{
             )
             .then((response) => {
             const newManger = new Manager(newEmployee.name, newEmployee.id, newEmployee.email,  response.office);
-            roleChoices = ["Engineer", "Intern"];
+            roleChoices = ["Engineer", "Intern"]; //delete manager from the array
             manageNewEmployees(newManger)
         })
         }
     })
   }
 manageNewEmployees = (emp) =>{
-    inputEmployees.push(emp)
+    inputEmployees.push(emp) //push user input into the array
     askEnterEmployee()
 }
 
-askEnterEmployee = () =>{
+askEnterEmployee = () =>{//initial prompt
     inquirer
         .prompt([
         {
@@ -96,27 +97,17 @@ askEnterEmployee = () =>{
         .then(val => {
         if (val.choice) {
             init();
-        } else {
+        } else { //write html into team.html
             const html = render(inputEmployees);
             fs.writeFile(outputPath, html, function(err) {
                 if (err) {
                   return console.log(err);
                 }
-                console.log("Success!");
               });
         }
         })
 }
-// checkManagerExistent = () =>{
-//     console.log(inputEmployees)
-//     for (let i = 0; i < inputEmployees.length; i++){
-//     if (inputEmployees[i] == "Manager") 
-//         return roleChoices = ["Engineer", "Intern", "Manager"]
-//     else{
-//         return roleChoices =  ["Engineer", "Intern"] 
-//     }
-// }
-// }
+
 askEnterEmployee()
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
