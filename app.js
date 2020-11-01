@@ -8,10 +8,17 @@ const fs = require("fs");
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
+const inputEmployees = []
 const render = require("./lib/htmlRenderer");
+const Employee = require("./lib/Employee");
 
-async function init() {
-     inquirer.prompt([
+init = () =>{
+     inquirer.prompt([{
+        type: "list",
+        name: "role",
+        message: "What is the employee role?",
+        choices:["Intern", "Engineer", "Manager"]
+        },
       {
         type: "input",
         name: "name",
@@ -26,12 +33,6 @@ async function init() {
         type: "input",
         name: "email",
         message: "What is the employee email?"
-      },
-      {
-        type: "list",
-        name: "role",
-        message: "What is the employee role?",
-        choices:["Intern", "Engineer", "Manager"]
       }
     ])
     .then((newEmployee) => {
@@ -45,7 +46,7 @@ async function init() {
             )
             .then((response) => {
                 const newIntern = new Intern(newEmployee.name, newEmployee.id, newEmployee.email, response.school);
-                console.log(newIntern)
+                manageNewEmployees(newIntern)
             })
         }
         else if (newEmployee.role == "Engineer"){
@@ -57,8 +58,8 @@ async function init() {
                 }
             )
             .then((response) => {
-            const newEngineer = new Engineer(newEmployee.name, newEmployee.id, newEmployee.email, response.github);
-            console.log(newEngineer)
+            const newEngineer = new Engineer(newEmployee.name, newEmployee.id, newEmployee.email, response.github,newEmployee.role);
+            manageNewEmployees(newEngineer)
         })
         }
         else{
@@ -70,25 +71,43 @@ async function init() {
                 }
             )
             .then((response) => {
-            const newManger = new Manager(newEmployee.name, newEmployee.id, newEmployee.email, response.office);
-            console.log(newManger)
+            const newManger = new Manager(newEmployee.name, newEmployee.id, newEmployee.email,  response.office);
+            manageNewEmployees(newManger)
         })
         }
         
     })
   }
+manageNewEmployees = (emp) =>{
+    inputEmployees.push(emp)
+    askEnterEmployee()
+}
 
-// async function init() {
-//     console.log("hi")
-//     try {
-//     const answers = await promptUser();
+askEnterEmployee = () =>{
+    inquirer
+        .prompt([
+        {
+            type: "confirm",
+            name: "choice",
+            message: "Do you want to enter a new employee?"
+        }
+        ])
+        .then(val => {
+        if (val.choice) {
+            init();
+        } else {
+            const html = render(inputEmployees);
+            fs.writeFile(outputPath, html, function(err) {
+                if (err) {
+                  return console.log(err);
+                }
+                console.log("Success!");
+              });
+        }
+        })
+}
 
-//     } catch(err) {
-//         console.log(err);
-//     }
-// }
-
-init();
+askEnterEmployee()
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
@@ -97,8 +116,8 @@ init();
 // generate and return a block of HTML including templated divs for each employee!
 
 // After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
+// returned from the `render` function. Now write it to a file named `team.html`  in the
+// `output` folder.You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
 
